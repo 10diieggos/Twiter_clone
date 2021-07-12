@@ -28,5 +28,18 @@ abstract class Action
 		$currentClass = strtolower(str_replace('Controller', '', $currentClass));
 		require_once '../App/Views/'. $currentClass .'/' . $this->view->page . '.phtml';
 	}
+	
+	protected function verifyAuth($view = null)
+	{
+		session_start();
+    if ($_SESSION['id'] != '' && $_SESSION['nome'] != '') {
+      if ($view != null) {
+				$this->render($view);
+			}
+    }
+    else {
+      header('Location: /?login=erro');
+    }
+	}
 }
 ?>
