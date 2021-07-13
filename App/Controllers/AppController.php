@@ -18,6 +18,7 @@ class AppController extends Action{
     $this->verifyAuth();
     $tweet = Container::getMoldel('Tweet');
     $tweet->__set('id_usuario', $_SESSION['id']);
+    $tweet->__set('tweet', $_POST['tweet']);
     $tweet->insert();
     header('Location: /timeline');
 	}
