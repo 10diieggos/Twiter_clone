@@ -22,7 +22,7 @@ class Tweet extends Model
   {
     $data = "DATE_FORMAT(data, '%d/%m/%Y %H:%i') as data";
     $columns = ['id', 'id_usuario', 'tweet', $data];
-    $where = "id_usuario = :id_usuario";
+    $where = "id_usuario = :id_usuario ORDER BY data DESC";
     $bind['id_usuario'] = $userSession;
     return $this->selectWhere($columns, $this->table, $where, $bind);
   }
