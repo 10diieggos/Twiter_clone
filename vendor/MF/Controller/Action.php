@@ -29,17 +29,13 @@ abstract class Action
 		require_once '../App/Views/'. $currentClass .'/' . $this->view->page . '.phtml';
 	}
 	
-	protected function verifyAuth($view = null)
+	protected function verifyAuth()
 	{
 		session_start();
-    if ($_SESSION['id'] != '' && $_SESSION['nome'] != '') {
-      if ($view != null) {
-				$this->render($view);
-			}
-    }
-    else {
+    if (!isset($_SESSION['id'])||!isset($_SESSION['nome'])||$_SESSION['id']==''||$_SESSION['nome']=='') 
+		{
       header('Location: /?login=erro');
-    }
+		}
 	}
 }
 ?>
