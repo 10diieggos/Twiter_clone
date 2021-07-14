@@ -20,11 +20,10 @@ class Tweet extends Model
   }
   public function getUserTweets($userSession)
   {
-    $data = "DATE_FORMAT(data, '%d/%m/%Y %H:%i') as data";
-    $columns = ['id', 'id_usuario', 'tweet', $data];
-    $where = "id_usuario = :id_usuario ORDER BY data DESC";
+    $sql = "SELECT id, id_usuario, tweet, DATE_FORMAT(data, '%d/%m/%Y %H:%i') as data FROM tweets  WHERE id_usuario = :id_usuario ORDER BY data DESC";
     $bind['id_usuario'] = $userSession;
-    return $this->selectWhere($columns, $this->table, $where, $bind);
+    $fetch = ['all', \PDO::FETCH_OBJ];
+    return $this->sqlQuery($sql, $bind, $fetch);
   }
 }
 ?>
