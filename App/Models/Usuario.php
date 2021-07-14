@@ -10,16 +10,17 @@ class Usuario extends Model
 
   protected $table = 'usuarios';
 
-  public function insertPOST($post)
+  public function insertNewUser($post)
   {
-    $columns = ['nome', 'email'];
-    $where = "email = :email and senha = :senha";
     $binds = array('email'=> $post['email']);
-    if (count($this->selectWhere($columns, $this->table, $where, $binds)) == 0 )
+    $sql = "SELECT 'nome', 'email' FROM $this->table WHERE email = :email";
+    $fetch = ['all', \PDO::FETCH_OBJ];
+    if (count($this->sqlQuery($sql, $binds, $fetch)) == 0 )
     {
       if ($this->validate($post)) {
+        $sql = "INSERT INTO $this->table(nome, email, senha) VALUES (:nome, :email, :senha)";
         $post['senha'] = md5($post['senha']);
-        return $this->insertInto($this->table, $post);
+        return $this->sqlQuery($sql, $post);
        }
     }
   }

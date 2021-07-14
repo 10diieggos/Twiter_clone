@@ -19,7 +19,7 @@ class IndexController extends Action{
 	public function registrar() 
 	{
 		$usuario = Container::getMoldel('Usuario');
-		$success = $usuario->insertPOST($_POST);
+		$success = $usuario->insertNewUser($_POST);
 		if ($success) {
 			$this->render('cadastro');
 		} else {
