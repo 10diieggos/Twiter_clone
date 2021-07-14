@@ -26,15 +26,15 @@ class Usuario extends Model
   }
   public function logon($binds)
   {
-    $columns = ['id','nome','email'];
+    $sql = "SELECT id,nome,email FROM $this->table WHERE email = :email and senha = :senha";
     $binds['senha'] = md5($binds['senha']);
-    $where = "email = :email and senha = :senha";
-    $user = $this->selectWhere($columns, $this->table, $where, $binds);
-    if ($user[0]->id != '' && $user[0]->nome != '') 
+    $fetch = ['one', \PDO::FETCH_OBJ];
+    $user = $this->sqlQuery($sql, $binds, $fetch);
+    if ($user->id != '' && $user->nome != '') 
     {
-      $this->__set('id', $user[0]->id);
-      $this->__set('nome', $user[0]->nome);
-      $this->__set('email', $user[0]->email);
+      $this->__set('id', $user->id);
+      $this->__set('nome', $user->nome);
+      $this->__set('email', $user->email);
     }
     return $this;
   }
