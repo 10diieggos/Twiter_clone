@@ -67,6 +67,28 @@ abstract class Model
     return $stmt->fetchAll(\PDO::FETCH_OBJ);
   }
 
+  public function sqlQuery($sql, $binds = null, $fetch = [null])
+  {
+    $stmt = $this->db->prepare($sql);
+    if ($binds != null) {
+      foreach ($binds as $key => $value) {
+        $stmt->bindValue(":". $key, $value);
+      }
+    }
+    $stmt->execute();
+    switch ($fetch[0]) 
+    {
+      case null:
+          return $this;
+          break;            
+      case 'one':
+        return $stmt->fetch(\PDO::FETCH_OBJ);
+        break;
+      case 'all':
+        return $stmt->fetchAll(\PDO::FETCH_OBJ);
+        break;
+    }
+  }
   /********************************/
   /********************************/
   /********************************/
