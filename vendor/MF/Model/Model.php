@@ -33,39 +33,6 @@ abstract class Model
   /************* QUERYS *************/
   /************* QUERYS *************/
   /************* QUERYS *************/
-  public function selectWhere($columns, $table, $where, $binds)
-  {
-    $columns = implode(", ", $columns);
-    $sql = "SELECT $columns FROM $table WHERE $where";
-    $stmt = $this->db->prepare($sql);
-    foreach ($binds as $key => $value) {
-      $stmt->bindValue(":". $key, $value);
-    }
-    $stmt->execute();
-    return $stmt->fetchAll(\PDO::FETCH_OBJ);
-  }
-  
-  public function insertInto($table, $post)
-  { 
-    $keys = implode(", ", array_keys($post));
-    $_keys = ':'. str_replace(' ',' :',$keys);
-    $sql = "INSERT INTO $table($keys) VALUES ($_keys)";
-    $stmt = $this->db->prepare($sql);
-    foreach ($post as $attr => $value) 
-    {
-      $stmt->bindValue(":$attr", $value);
-    }
-    $stmt->execute();
-    return $this;
-  }
-  public function select($table, $columns)
-  {
-    $keys = implode(", ", $columns);
-    $sql = "SELECT $keys FROM $table";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(\PDO::FETCH_OBJ);
-  }
 
   public function sqlQuery($sql, $binds = null, $fetch = [null])
   {
