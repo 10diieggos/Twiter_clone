@@ -40,11 +40,25 @@ class Usuario extends Model
   }
   public function getSearchUsers()
   {
-    $sql = "SELECT id,nome,email FROM usuarios WHERE nome like :nome and id != :id_ususario";
+    $subSql = "SELECT count(*) FROM followers as f WHERE f.id_usuario = :id_usuario and f.id_usuario_seguindo = u.id";
+    $sql = "SELECT u.id, u.nome, u.email, ($subSql) as following FROM usuarios as u WHERE u.nome like :nome and u.id != :id_usuario";
     $binds['nome'] = '%' . $this->nome . '%';
-    $binds['id_ususario'] = $this->id;
+    $binds['id_usuario'] = $this->id;
     $fetch = ['all', \PDO::FETCH_OBJ];
     return $this->sqlQuery($sql, $binds, $fetch);
+  }
+  public function follow($follow, $user_target_id)
+  {
+    if ($follow) {
+      $sql = "INSERT INTO followers(id_usuario, id_usuario_seguindo) VALUES (:id_usuario, :id_usuario_seguindo)";
+    }
+    else
+    {
+      $sql = "DELETE FROM followers WHERE id_usuario = :id_usuario and id_usuario_seguindo = :id_usuario_seguindo ";
+    }
+    $binds['id_usuario'] = $this->id;
+    $binds['id_usuario_seguindo'] = $user_target_id;
+    return $this->sqlQuery($sql, $binds);
   }
 }
 ?>

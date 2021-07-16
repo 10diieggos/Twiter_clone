@@ -25,6 +25,12 @@ create table tweets(
 	data datetime default current_timestamp
 );
 
+create table followers(
+	id int not null PRIMARY KEY AUTO_INCREMENT,
+	id_usuario int not null,
+	id_usuario_seguindo int not null
+);
+
 INSERT INTO tweets(id_usuario, tweet, data) VALUES
 (212,'vel quam dignissim','2019-05-14 19:09:40'),
 (111,'Nunc ut','2019-08-31 16:59:37'),

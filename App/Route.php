@@ -50,6 +50,12 @@ class Route extends Bootstrap {
 			'action' => 'tweet'
 		);
 		
+		$routes['search_users'] = array(
+			'route' => '/search_users',
+			'controller' => 'AppController',
+			'action' => 'search_users'
+		);
+
 		$routes['follow'] = array(
 			'route' => '/follow',
 			'controller' => 'AppController',

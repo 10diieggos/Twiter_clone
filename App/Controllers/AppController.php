@@ -22,7 +22,7 @@ class AppController extends Action{
     $tweet->insertTweet();
     header('Location: /timeline');
 	}
-  public function follow()
+  public function search_users()
   {
     $this->verifyAuth();
     $users = [];
@@ -35,7 +35,17 @@ class AppController extends Action{
       $users = $user->getSearchUsers();
     }
     $this->view->users = $users;
-    $this->render('follow');
+    $this->render('search_users');
+  }
+  public function follow()
+  {
+    $this->verifyAuth();
+    $follow = isset($_GET['follow'])? (boolean) $_GET['follow']:'';
+    $user_target_id = isset($_GET['user_Target_Id'])?$_GET['user_Target_Id']:'';
+    $user_session = Container::getMoldel('Usuario');
+    $user_session->__set('id', isset($_SESSION['id'])?$_SESSION['id']:'');
+    $user_session->follow($follow,$user_target_id);
+    header('Location: /search_users?' . $_GET['reloadSearch']);
   }
 }
 ?>
