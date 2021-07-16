@@ -31,6 +31,7 @@ class AppController extends Action{
     {
       $user = Container::getMoldel('Usuario');
       $user->__set('nome', $search);
+      $user->__set('id', $_SESSION['id']);
       $users = $user->getSearchUsers();
     }
     $this->view->users = $users;

@@ -40,8 +40,9 @@ class Usuario extends Model
   }
   public function getSearchUsers()
   {
-    $sql = "SELECT id,nome,email FROM usuarios WHERE nome like :nome";
+    $sql = "SELECT id,nome,email FROM usuarios WHERE nome like :nome and id != :id_ususario";
     $binds['nome'] = '%' . $this->nome . '%';
+    $binds['id_ususario'] = $this->id;
     $fetch = ['all', \PDO::FETCH_OBJ];
     return $this->sqlQuery($sql, $binds, $fetch);
   }
