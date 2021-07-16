@@ -22,5 +22,19 @@ class AppController extends Action{
     $tweet->insertTweet();
     header('Location: /timeline');
 	}
+  public function follow()
+  {
+    $this->verifyAuth();
+    $users = [];
+    $search = isset($_GET['search'])?$_GET['search']:'';
+    if ($search != '') 
+    {
+      $user = Container::getMoldel('Usuario');
+      $user->__set('nome', $search);
+      $users = $user->getSearchUsers();
+    }
+    $this->view->users = $users;
+    $this->render('follow');
+  }
 }
 ?>

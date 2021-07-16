@@ -38,5 +38,12 @@ class Usuario extends Model
     }
     return $this;
   }
+  public function getSearchUsers()
+  {
+    $sql = "SELECT id,nome,email FROM usuarios WHERE nome like :nome";
+    $binds['nome'] = '%' . $this->nome . '%';
+    $fetch = ['all', \PDO::FETCH_OBJ];
+    return $this->sqlQuery($sql, $binds, $fetch);
+  }
 }
 ?>
