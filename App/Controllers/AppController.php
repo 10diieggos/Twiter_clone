@@ -10,7 +10,7 @@ class AppController extends Action{
 	{
     $this->verifyAuth();
     $tweet = Container::getMoldel('Tweet');
-    $this->view->tweets = $tweet->getUserTweets($_SESSION['id']);
+    $this->view->tweets = $tweet->getTweets($_SESSION['id']);
     $this->render('timeline');
 	}
   public function tweet() 
@@ -46,6 +46,14 @@ class AppController extends Action{
     $user_session->__set('id', isset($_SESSION['id'])?$_SESSION['id']:'');
     $user_session->follow($follow,$user_target_id);
     header('Location: /search_users?' . $_GET['reloadSearch']);
+  }
+  public function removeTweet()
+  {
+    $this->verifyAuth();
+    $tweet = Container::getMoldel('Tweet');
+    $tweet->__set('id', $_GET['tweet']);
+    $tweet->delete();
+    header('Location: /timeline');
   }
 }
 ?>

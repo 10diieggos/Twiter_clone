@@ -71,15 +71,22 @@
 			<?php foreach ($this->view->tweets as $id_tweet => $tweet) { ?>
 			<div class="row tweet">
 				<div class="col">
-					<p><strong><?= $_SESSION['nome'] ?></strong><small><span class="text text-muted">- <?= $tweet->data ?></span></small></p>
+					<p><strong><?= $tweet->nome ?></strong><small><span class="text text-muted">- <?= $tweet->date ?></span></small></p>
 					<p><?= $tweet->tweet ?></p>
 
 					<br />
-					<form>
-						<div class="col d-flex justify-content-end">
-							<button type="submit" class="btn btn-danger"><small>Remover</small></button>
-						</div>
-					</form>
+					<div id="<?= $tweet->id ?>"></div>
+					<script>
+					 if(<?= $tweet->id_usuario ?> == <?= $_SESSION['id'] ?>)
+					 {
+						 $('#<?= $tweet->id ?>').html(`
+									<div class="col d-flex justify-content-end">
+										<a href="/removeTweet?tweet=<?= $tweet->id ?>" class="btn btn-danger"><small>Remover</small></a>
+									</div>
+						 `)
+					 }
+
+					</script>
 				</div>
 			</div>
 			<?php } ?>
@@ -98,3 +105,6 @@
 
 	</div>
 </div>
+
+
+					

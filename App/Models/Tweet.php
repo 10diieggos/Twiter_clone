@@ -21,12 +21,31 @@ class Tweet extends Model
     }
   }
 
-  public function getUserTweets($userSession)
+  public function getTweets($userSession)
   {
-    $sql = "SELECT id, id_usuario, tweet, DATE_FORMAT(data, '%d/%m/%Y %H:%i') as data FROM tweets  WHERE id_usuario = :id_usuario ORDER BY tweets.data DESC";
+    $sql = "SELECT
+              t.id,
+              t.id_usuario,
+              u.nome,
+              t.tweet,
+              DATE_FORMAT(t.data, '%d/%m/%Y %H:%i') as date
+            FROM
+              tweets as t
+              left join usuarios as u on (t.id_usuario = u.id)
+            WHERE
+              t.id_usuario = :id_usuario
+              or t.id_usuario in (SELECT id_usuario_seguindo FROM followers WHERE id_usuario = :id_usuario)
+            ORDER BY 
+              t.data DESC";
     $bind['id_usuario'] = $userSession;
     $fetch = ['all', \PDO::FETCH_OBJ];
     return $this->sqlQuery($sql, $bind, $fetch);
+  }
+  public function delete()
+  {
+    $sql = "DELETE FROM `tweets` WHERE `id` = :id";
+    $binds['id'] = $this->id;
+    return $this->sqlQuery($sql, $binds);
   }
 }
 ?>
