@@ -11,6 +11,10 @@ class AppController extends Action{
     $this->verifyAuth();
     $tweet = Container::getMoldel('Tweet');
     $this->view->tweets = $tweet->getTweets($_SESSION['id']);
+    $user = Container::getMoldel('Usuario');
+    $user->__set('id', $_SESSION['id']);
+    $user_info = $user->getInfoUser();
+    $this->view->user_info = $user_info;
     $this->render('timeline');
 	}
   public function tweet() 
@@ -26,14 +30,16 @@ class AppController extends Action{
   {
     $this->verifyAuth();
     $users = [];
+    $user = Container::getMoldel('Usuario');
+    $user->__set('id', $_SESSION['id']);
+    $user_info = $user->getInfoUser();
     $search = isset($_GET['search'])?$_GET['search']:'';
     if ($search != '') 
     {
-      $user = Container::getMoldel('Usuario');
       $user->__set('nome', $search);
-      $user->__set('id', $_SESSION['id']);
       $users = $user->getSearchUsers();
     }
+    $this->view->user_info = $user_info;
     $this->view->users = $users;
     $this->render('search_users');
   }

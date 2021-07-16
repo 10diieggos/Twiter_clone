@@ -60,5 +60,27 @@ class Usuario extends Model
     $binds['id_usuario_seguindo'] = $user_target_id;
     return $this->sqlQuery($sql, $binds);
   }
+  public function getInfoUser()
+  {
+    $info = [];
+    $binds['id_usuario'] = $this->id;
+    $fetch = ['one'];
+    
+    $sql = "SELECT count(id) as total_tweets FROM tweets WHERE id_usuario = :id_usuario";
+    $info [] = $this->sqlQuery($sql, $binds, $fetch);
+    $sql = "SELECT count(id_usuario_seguindo) as total_seguindo FROM followers WHERE id_usuario = :id_usuario";
+    $info [] = $this->sqlQuery($sql, $binds, $fetch);
+    $sql = "SELECT count(id_usuario) as total_seguidores FROM followers WHERE id_usuario_seguindo = :id_usuario";
+    $info [] = $this->sqlQuery($sql, $binds, $fetch);
+
+   $user_info = (object)[];
+   foreach ($info as $key => $value) {
+     foreach ($value as $k => $v) {
+       $user_info->$k = $v;
+     }
+   }
+
+    return $user_info;
+  }
 }
 ?>

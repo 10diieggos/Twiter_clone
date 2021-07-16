@@ -31,7 +31,7 @@ let params  = url.replace("http://localhost:8080/search_users?","")
 					
 					<div class="row mt-2 mb-2">
 						<div class="col mb-2">
-							<span class="perfilPainelNome">Nome do Usuário</span>
+							<span class="perfilPainelNome"><?= $_SESSION['nome'] ?></span>
 						</div>
 					</div>
 
@@ -39,17 +39,17 @@ let params  = url.replace("http://localhost:8080/search_users?","")
 
 						<div class="col">
 							<span class="perfilPainelItem">Tweets</span><br />
-							<span class="perfilPainelItemValor">0</span>
+							<span class="perfilPainelItemValor"><?= $this->view->user_info->total_tweets ?></span>
 						</div>
 
 						<div class="col">
 							<span class="perfilPainelItem">Seguindo</span><br />
-							<span class="perfilPainelItemValor">0</span>
+							<span class="perfilPainelItemValor"><?= $this->view->user_info->total_seguindo ?></span>
 						</div>
 
 						<div class="col">
 							<span class="perfilPainelItem">Seguidores</span><br />
-							<span class="perfilPainelItemValor">0</span>
+							<span class="perfilPainelItemValor"><?= $this->view->user_info->total_seguidores ?></span>
 						</div>
 
 					</div>
