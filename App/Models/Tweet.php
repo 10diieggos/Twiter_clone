@@ -21,26 +21,33 @@ class Tweet extends Model
     }
   }
 
-  public function getTweets($userSession)
+  public function totalForPagination()
   {
-    $sql = "SELECT
-              t.id,
-              t.id_usuario,
-              u.nome,
-              t.tweet,
-              DATE_FORMAT(t.data, '%d/%m/%Y %H:%i') as date
-            FROM
-              tweets as t
-              left join usuarios as u on (t.id_usuario = u.id)
-            WHERE
-              t.id_usuario = :id_usuario
-              or t.id_usuario in (SELECT id_usuario_seguindo FROM followers WHERE id_usuario = :id_usuario)
-            ORDER BY 
-              t.data DESC";
-    $bind['id_usuario'] = $userSession;
-    $fetch = ['all', \PDO::FETCH_OBJ];
-    return $this->sqlQuery($sql, $bind, $fetch);
+    $bind['id_usuario'] = $this->id_usuario;
+    $sql = "SELECT count(t.id) as total
+    FROM tweets as t
+    LEFT JOIN usuarios as u on (t.id_usuario = u.id)
+    WHERE t.id_usuario = :id_usuario 
+          or 
+          t.id_usuario in (SELECT id_usuario_seguindo FROM followers WHERE id_usuario = :id_usuario)";
+    return $this->sqlQuery($sql, $bind, ['one', \PDO::FETCH_OBJ]);
   }
+
+  public function getTweets($limit, $offset)
+  {
+    $bind['id_usuario'] = $this->id_usuario;
+    $sql = "SELECT t.id, t.id_usuario, u.nome, t.tweet, DATE_FORMAT(t.data, '%d/%m/%Y %H:%i') as date
+            FROM tweets as t
+            LEFT JOIN usuarios as u on (t.id_usuario = u.id)
+            WHERE t.id_usuario = :id_usuario 
+                  or 
+                  t.id_usuario in (SELECT id_usuario_seguindo FROM followers WHERE id_usuario = :id_usuario)
+            ORDER BY t.data DESC
+            LIMIT $limit OFFSET $offset";
+
+    return $this->sqlQuery($sql, $bind, ['all', \PDO::FETCH_OBJ]);
+  }
+
   public function delete()
   {
     $sql = "DELETE FROM `tweets` WHERE `id` = :id";

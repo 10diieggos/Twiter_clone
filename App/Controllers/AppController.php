@@ -9,12 +9,19 @@ class AppController extends Action{
 	public function timeline() 
 	{
     $this->verifyAuth();
-    $tweet = Container::getMoldel('Tweet');
-    $this->view->tweets = $tweet->getTweets($_SESSION['id']);
     $user = Container::getMoldel('Usuario');
     $user->__set('id', $_SESSION['id']);
-    $user_info = $user->getInfoUser();
-    $this->view->user_info = $user_info;
+    $tweet = Container::getMoldel('Tweet');
+    $tweet->__set('id_usuario',$_SESSION['id']);
+
+    $limit = 5;
+    $page = isset($_GET['page'])?$_GET['page']:1;
+    $offset = ($page - 1) * $limit;
+    $totalForPagination = $tweet->totalForPagination();
+    $this->view->pages = ceil($totalForPagination->total/$limit);
+    $this->view->activePage = $page;    
+    $this->view->tweets = $tweet->getTweets($limit, $offset);
+    $this->view->user_info = $user->getInfoUser();
     $this->render('timeline');
 	}
   public function tweet() 

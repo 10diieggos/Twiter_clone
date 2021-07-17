@@ -91,6 +91,21 @@
 			</div>
 			<?php } ?>
 
+			<div class="row mt-5" >
+				<nav aria-label="...">
+					<ul class="pagination">
+
+						<li class="page-item"><a class="page-link" href="?page=1" tabindex="-1">Primeira</a></li>
+						<?php for ($i=1; $i <= $this->view->pages ; $i++) { ?>
+							<li class="page-item <?= $this->view->activePage==$i?'active':'' ?>">
+								<a class="page-link" href="?page=<?= $i ?>"><?= $i ?><span class="sr-only">(current)</span></a>
+							</li>
+						<?php } ?>
+						<li class="page-item"><a class="page-link" href="?page=<?= $this->view->pages ?>">Ultima</a></li>
+					</ul>
+				</nav>
+			</div>
+
 
 		</div>
 
